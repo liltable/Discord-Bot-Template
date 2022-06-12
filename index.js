@@ -10,10 +10,10 @@ client.voiceGenerator = new Collection();
 
 module.exports = client;
 
-/*
+
 require('./Structures/Handlers/anticrash')(client);
 require('./Structures/Handlers/events')(client);
 require('./Structures/Handlers/commands')(client);
-*/
 
-client.login(proces.env.token)
+
+client.login(process.env.token)
