@@ -17,13 +17,13 @@ module.exports = {
       type: "WATCHING"
     });
 
-    if(!database) return console.log("VOIDED || No database found.");
+    if(!database) return console.log("No database found.");
     
     mongoose.connect(database, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     }).then(() => {
-      console.log("VOIDED || Storage link created.")
+      console.log("Storage link created.")
     }).catch((err) => {
       console.log(err)
     });
