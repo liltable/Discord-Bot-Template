@@ -11,7 +11,7 @@ module.exports = {
 */
 
   async execute(client) {
-    console.log(`VOIDED || Started client link at ${client.user.tag}. Logged in.`);
+    console.log(`Started client link at ${client.user.tag}. Logged in.`);
 
     client.user.setActivity("all voided things...", {
       type: "WATCHING"
