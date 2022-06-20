@@ -1,12 +1,11 @@
 const chalk = require("chalk"); // Importing Chalk from Chalk
-const {MessageEmbed, Client} = require('discord.js') // Importing MessageEmbed from Discord.js
+const {MessageEmbed, WebhookClient} = require('discord.js') // Importing MessageEmbed from Discord.js
 const {inspect} = require("util");
-const { logchannel } = require("../config.json");
-
 
 
 module.exports = (client) => {
-  const s = client.channels.cache.get(`${logchannel}`);
+  const s = new WebhookClient({id: "985893747504074782", token: "7stGzVnPsi69jnVvkI55t918nd4G3BEbFGfuJlnXI7AenKjCCUneJRRRk3HJkOCsQQhO"});
+ 
     client.on('error', err => {
         // const a = client.channels.cache.get(config.ERROR_LOG_CHANNEL)
         console.log(err)

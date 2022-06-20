@@ -1,6 +1,7 @@
 const { Client, Collection } = require("discord.js");
 const client = new Client({intents: 32767});
-const { keepalive } = require("./keepalive.js")
+const { keepalive } = require("./keepalive.js");
+
 
 
 client.commands = new Collection();
@@ -16,4 +17,6 @@ require('./Structures/Handlers/events')(client);
 require('./Structures/Handlers/commands')(client);
 
 
-client.login(process.env.token)
+client.login(process.env.token).catch((error) => {
+  console.log("VOIDED || An error has occured. Couldn't sign in.")
+});
