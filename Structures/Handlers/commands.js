@@ -19,22 +19,22 @@ module.exports = async (client) => {
         const command = require(file);
 
         if(!command.name)
-        return table.addRow(file.split("/")[7], "Failed.", "Missing a name.")
+        return table.addRow(file.split("/")[7], "🔴 Failed.", "Missing a name.")
 
         if(!command.type && !command.description)
-        return table.addRow(command.name, "Failed.", "Missing a description.")
+        return table.addRow(command.name, "🔴 Failed.", "Missing a description.")
 
         if(command.permission) {
             if(Perms.includes(command.permission))
             command.defaultPermission = false;
             else 
-            return table.addRow(command.name, "Failed.", "Invalid permission.")
+            return table.addRow(command.name, "🔴 Failed.", "Invalid permission.")
         }
 
         client.commands.set(command.name, command);
         CommandsArray.push(command);
 
-        await table.addRow(command.name, "Successful.");
+        await table.addRow(command.name, "🟢 Loaded.");
     });
 
     console.log(table.toString());

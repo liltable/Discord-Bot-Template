@@ -9,7 +9,7 @@ module.exports = {
   /** 
   * @param {CommandInteraction} interaction
   */
-  async execute(interaction, client) {
+  async execute(interaction) {
     const Locations = [
             "car",
             "bathroom",
@@ -19,7 +19,7 @@ module.exports = {
             "pocket",
         ]
     const Chosen = Locations.sort(() => Math.random() - Math.random()).slice(0,3);
-        const Filter = ({author, content}) => interaction.user == author && Chosen.some((Locations) => Locations.toLowerCase() == content.toLowerCase());
+        const Filter = ({author, content}) => interaction.user === author && Chosen.some((Locations) => Locations.toLowerCase() === content.toLowerCase());
         const collector = interaction.channel.createMessageCollector({filter: Filter, time: ms("30s"), idle: ms("10s")});
         const Earnings = Math.floor(Math.random() * (1000 - 100 + 1)) + 100;
 
@@ -30,7 +30,9 @@ module.exports = {
       .setDescription(`> Where would you like to search? \n> \`${Chosen.join('` `')}\``)
     ]}).then(
       collector.on("collect", async (m) => {
-        if(m.content !== Chosen.some((Locations) => Locations.toLowerCase === m.content.toLowerCase)) {
+        if(m.content !== Chosen.some((Locations) => Locations.toLowerCase() === m.content.toLowerCase())) {
+
+          console.log(`${Chosen.some((Locations) => Locations.toLowerCase())}`)
 
           collector.stop({reason: "player"});
           
