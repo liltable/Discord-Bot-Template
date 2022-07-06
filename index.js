@@ -13,6 +13,7 @@ module.exports = client;
 
 
 require('./Structures/Handlers/anticrash')(client);
+require('./Structures/Handlers/antispam')(client);
 require('./Structures/Handlers/events')(client);
 require('./Structures/Handlers/commands')(client);
 

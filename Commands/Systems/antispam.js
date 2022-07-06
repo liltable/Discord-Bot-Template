@@ -20,17 +20,18 @@ module.exports = {
       required: true
     },
     {
+      name: "time",
+      description: "How much time should pass between messages before they're considered spam? || IN SECONDS",
+      type: "NUMBER",
+      required: true
+    },
+    {
       name: "warns",
       description: "How many messages before the user gets warned?",
       type: "NUMBER",
       required: false
     },
-    {
-      name: "time",
-      description: "How much time should pass between messages before they're considered spam? || IN SECONDS",
-      type: "NUMBER",
-      required: false
-    },
+    
     {
       name: "message",
       description: "Set the warn message. || User: {user_tag}",
@@ -63,7 +64,7 @@ module.exports = {
       GuildID: interaction.guild.id,
       Enabled: interaction.options.getBoolean("enabled"),
       WarnThreshold: interaction.options.getNumber("warns") || 0,
-      MaxInterval: ms(interaction.options.getNumber("time")) || 2000,
+      MaxInterval: ms(interaction.options.getNumber("time")),
       WarnMessage: interaction.options.getString("message") || `{user_tag} has been caught spamming. Please stop.`,
       MaxDuplicatesWarning: interaction.options.getNumber("duplicates") || 6,
       IgnoredPermissions: ["ADMINISTRATOR", "MANAGE_GUILD"],
@@ -95,6 +96,7 @@ module.exports = {
     .setTimestamp() 
         ]});
     }
+    
     if(Profile) {
       DB.findOneAndUpdate({
          GuildID: interaction.guild.id,
@@ -118,7 +120,7 @@ module.exports = {
         .setTimestamp()  
         ]});
 
-      LogChannel.send({embeds: [
+      return LogChannel.send({embeds: [
           new MessageEmbed()
           .setColor("GREEN")
           .setTitle("Antispam Settings Changed")
@@ -135,7 +137,7 @@ module.exports = {
       new MessageEmbed()
       .setColor("RED")
       .setDescription(`> :no_entry_sign: An unknown error has occured.`)
-    ], ephemeral: true});
+    ], ephemeral: true}).catch();
     
   }
 }

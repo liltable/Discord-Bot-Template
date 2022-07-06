@@ -79,96 +79,16 @@ module.exports = {
     ], ephemeral: true});
 
     const LogMessage = new MessageEmbed()
-    .setTitle("User Timed Out")
     .setColor("RED")
     .setTimestamp()
     .setThumbnail(Target.avatarURL({dynamic: true}))
-    .addField("**――――――――――**", `> **Username:** ${Target}\n > ID: ${Target.id}`)
+    .addField("**――――――――――**", `> **Timed Out:** ${Target}\n > **ID:** ${Target.id}\n > **Duration:** ${Time}\n > **Reason:** ${Reason || "No reason proivded."}\n > **Staff:** ${Author}`)
 
     const Response = new MessageEmbed()
-    .setColor("RED");
+    .setColor("RED")
+    .setDescription(`> :white_check_mark: Timed out ${Target} for ${Time}.\n > **Reason:** ${Reason || "No reason provided."}`);
 
-    switch(Time) {
-      case "1m" : {Target.timeout(ms("1m"), Reason).catch((err) => {
-          console.log("VOIDED || Couldn't timeout user.")
-        return interaction.reply({embeds: [
-            new MessageEmbed()
-            .setColor("RED")
-            .setDescription(`> An error has occured. ${Target} was not timed out.`)
-          ], ephemeral: true})
-        });
-        Response.setDescription(`> Timed out ${Target} for 1m. Reason: ${Reason || "No reason provided."}`);
-        LogMessage.addField("**――――――――――**", `> **Duration:** ${Time}\n > **Reason:** ${Reason || "No reason provided."}\n > **Staff:** ${Author}`)
-        
-      }
-    break;
-      case "5m" : {
-        Target.timeout(ms("5m"), Reason).catch((err) => {
-          console.log("VOIDED || Couldn't timeout user.")
-          return interaction.reply({embeds: [
-            new MessageEmbed()
-            .setColor("RED")
-            .setDescription(`> An error has occured. ${Target} was not timed out.`)
-          ], ephemeral: true})
-        });
-        Response.setDescription(`> Timed out ${Target} for 5m. Reason: ${Reason || "No reason provided."}`);
-        LogMessage.addField("**――――――――――**", `> **Duration:** ${Time}\n > **Reason:** ${Reason || "No reason provided."}\n **Staff:** > ${Author} `)
-        
-      }
-        break;
-      case "20m" : {
-        Target.timeout(ms("20m"), Reason).catch((err) => {
-          console.log("VOIDED || Couldn't timeout user.")
-          return interaction.reply({embeds: [
-            new MessageEmbed()
-            .setColor("RED")
-            .setDescription(`> An error has occured. ${Target} was not timed out.`)
-          ], ephemeral: true})
-        });
-        Response.setDescription(`> Timed out ${Target} for 20m. Reason: ${Reason || "No reason provided."}`);
-        LogMessage.addField("**――――――――――**", `> **Duration:** ${Time}\n > **Reason:** ${Reason || "No reason provided."}\n **Staff:** > ${Author}`)
-        
-      }
-        break;
-      case "1h" : {
-        Target.timeout(ms("1h"), Reason).catch((err) => {
-          console.log("VOIDED || Couldn't timeout user.")
-          return interaction.reply({embeds: [
-            new MessageEmbed()
-            .setColor("RED")
-            .setDescription(`> An error has occured. ${Target} was not timed out.`)
-          ], ephemeral: true})
-        });
-        Response.setDescription(`> Timed out ${Target} for 1h. Reason: ${Reason || "No reason provided."}`);
-        LogMessage.addField("**――――――――――**", `> **Duration:** ${Time}\n > **Reason:** ${Reason || "No reason provided."}\n **Staff:** > ${Author}`);
-      }
-        break;
-      case "12h" : {
-        Target.timeout(ms("12h"), Reason).catch((err) => {
-          console.log("VOIDED || Couldn't timeout user.");
-          return interaction.reply({embeds: [
-            new MessageEmbed()
-            .setColor("RED")
-            .setDescription(`> An error has occured. ${Target} was not timed out.`)
-          ], ephemeral: true})
-        });
-        Response.setDescription(`> Timed out ${Target} for 12h. Reason: ${Reason || "No reason provided."}`);
-        LogMessage.addField("**――――――――――**", `> **Duration:** ${Time}\n > **Reason:** ${Reason || "No reason provided."}\n **Staff:** > ${Author}`);
-      }
-        break;
-      case "1w" : {
-        Target.timeout(ms("1w"), Reason).catch((err) => {
-          console.log("VOIDED || Couldn't timeout user.")
-          return interaction.reply({embeds: [
-            new MessageEmbed()
-            .setColor("RED")
-            .setDescription(`> An error has occured. ${Target} was not timed out.`)
-          ], ephemeral: true})
-        });
-        Response.setDescription(`> Timed out ${Target} for 1w. Reason: ${Reason || "No reason provided."}`);
-        LogMessage.addField("**――――――――――**", `> **Duration:** ${Time}\n > **Reason:** ${Reason || "No reason provided."}\n **Staff:** > ${Author}\n `);
-      }
-    }
+    Target.timeout(ms(Time), `${Reason || "VOIDED || No reason provided."}`);
 
     interaction.reply({embeds: [Response]});
     return LogChannel.send({embeds: [LogMessage]});

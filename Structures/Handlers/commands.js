@@ -42,14 +42,15 @@ module.exports = async (client) => {
     // PERMS CHECK //
 
       client.on('ready', async () => {
-        
-        //const mainGuild = client.guilds.cache.get("839221809769218099");
-
+        //Load commands for only servers that the bot's owner are in.
         client.guilds.cache.forEach(g => {
-          g.members.fetch(client.ownerId).then(console.log(`VOIDED || Loaded commands for ${g.name}.`), g.commands.set(CommandsArray)).catch((error) => {
-            console.log(`VOIDED || Owner not found. Skipped loading commands for ${g.name}.`)
-          });  
-          //mainGuild.commands.set(CommandsArray);
+          
+         let Owner = g.members.fetch(client.ownerId);
+          
+          if(!Owner) console.log(`VOIDED || Owner not found. Skipped loading commands for ${g.name}.`) && g.commands.delete(CommandsArray);
+          
+          if(Owner) console.log(`VOIDED || Loaded commands for ${g.name}.`) && g.commands.set(CommandsArray);
+          
     });
   });
 }
