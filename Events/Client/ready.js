@@ -13,8 +13,8 @@ module.exports = {
   async execute(client) {
     console.log(`VOIDED || Initialized at ${client.user.tag}.`);
 
-    client.user.setActivity("all voided things...", {
-      type: "WATCHING"
+    client.user.setActivity("to the void...", {
+      type: "LISTENING"
     });
 
     if(!database) return console.log("VOIDED || No database found.");

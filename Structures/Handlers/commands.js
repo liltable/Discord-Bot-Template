@@ -1,16 +1,13 @@
 const { Perms } = require('../Validation/permissions');
 const { Client } = require("discord.js");
-const { promisify } = require("util");
-const { glob } = require("glob");
-const PG = promisify(glob);
-const Ascii = require("ascii-table");
+
 
 /**
  * 
  * @param {Client} client 
  */
 
-module.exports = async (client) => {
+module.exports = async (client, PG, Ascii) => {
     const table = new Ascii("VOIDED || Commands")
 
     CommandsArray = [];
@@ -46,10 +43,14 @@ module.exports = async (client) => {
         client.guilds.cache.forEach(g => {
           
          let Owner = g.members.fetch(client.ownerId);
-          
-          if(!Owner) console.log(`VOIDED || Owner not found. Skipped loading commands for ${g.name}.`) && g.commands.delete(CommandsArray);
-          
-          if(Owner) console.log(`VOIDED || Loaded commands for ${g.name}.`) && g.commands.set(CommandsArray);
+          if(!Owner) {
+            g.commands.delete(CommandsArray);
+            g.leave();
+            console.log(`VOIDED || Owner not found. Left ${g.name}.`)
+          } else {
+            g.commands.set(CommandsArray);
+            console.log(`VOIDED || Loaded commands for ${g.name}.`)
+          }
           
     });
   });

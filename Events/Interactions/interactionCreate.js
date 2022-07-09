@@ -12,14 +12,14 @@ module.exports = {
             if(!command) return interaction.reply({embeds: [
                 new MessageEmbed()
                 .setColor("RED")
-                .setDescription("> An error occurred whilst running this command. Please contact support if this issue persists.")
+                .setDescription("> ERROR: Invalid command.")
             ]}) && client.commands.delete(interaction.commandName);
 
           if (command.permission && !interaction.member.permissions.has(command.permission)) {
     return interaction.reply({embeds: [
       new MessageEmbed()
       .setColor("RED")
-      .setDescription("> :no_entry_sign: You don't have the permissions necessary for this command!")
+      .setDescription("> :no_entry_sign: ERROR: Invalid permissions.")
     ]})
 }
             command.execute(interaction, client)

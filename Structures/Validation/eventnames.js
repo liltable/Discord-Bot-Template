@@ -67,5 +67,7 @@ module.exports = {
         "voiceStateUpdate",
         "warn",
         "webhookUpdate",
+      // Events added by developer.
+        "modalSubmit"
     ]
 }

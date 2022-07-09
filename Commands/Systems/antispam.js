@@ -55,12 +55,13 @@ module.exports = {
   * @param {CommandInteraction} interaction
   */
   async execute(interaction, client) {
-    let Profile = DB.findOne({GuildID: interaction.guild.id});
-
-    const LogChannel = interaction.options.getChannel("channel");
+    const LogChannel = client.channels.cache.get(process.env.vlogchannel);
     
-      if(!Profile) { 
-        DB.create({
+    await DB.findOne({GuildID: interaction.guild.id}, async (err, data) => {
+      if(err) throw err;
+      
+      if(!data) {
+      DB.create({
       GuildID: interaction.guild.id,
       Enabled: interaction.options.getBoolean("enabled"),
       WarnThreshold: interaction.options.getNumber("warns") || 0,
@@ -75,9 +76,9 @@ module.exports = {
           console.log(`VOIDED || An error has occured. Couldn't create antispam database entry for ${interaction.guild.name}.`)
       });
 
-  console.log(`VOIDED || Created antispam entry for ${interaction.guild.name}.`);
-        
-  interaction.reply({embeds: [
+      console.log(`Created antispam entry for ${interaction.guild.name}.`);
+
+      interaction.reply({embeds: [
     new MessageEmbed()
     .setColor("GREEN")
     .setTitle("Success!")
@@ -86,7 +87,7 @@ module.exports = {
     .setTimestamp()  
   ], ephemeral: true});
 
-        return LogChannel.send({embeds: [
+      return LogChannel.send({embeds: [
           new MessageEmbed()
           .setColor("RED")
           .setTitle("Antispam Settings Created")
@@ -95,12 +96,12 @@ module.exports = {
           .addField(`Staff:`, `${interaction.user}`)
     .setTimestamp() 
         ]});
-    }
-    
-    if(Profile) {
-      DB.findOneAndUpdate({
-         GuildID: interaction.guild.id,
-      Enabled: interaction.options.getBoolean("enabled"),
+        
+      }
+
+      if(data) {
+        DB.updateOne({GuildID: interaction.guild.id}, {
+          Enabled: interaction.options.getBoolean("enabled"),
       WarnThreshold: interaction.options.getNumber("warns") || 0,
       MaxInterval: ms(interaction.options.getNumber("time")) || 2000,
       WarnMessage: interaction.options.getString("message") || `{user_tag} has been caught spamming. Please stop.`,
@@ -109,9 +110,9 @@ module.exports = {
       IgnoredMembers: [`${interaction.guild.ownerId}`, `${client.ownerId}`],
       RemoveMessages: interaction.options.getBoolean("delete"),
       ModLogsChannelName: interaction.options.getChannel("channel").name
-      });
+        });
 
-       interaction.reply({embeds: [
+        interaction.reply({embeds: [
           new MessageEmbed()
           .setColor("GREEN")
         .setTitle("Success!")
@@ -120,7 +121,9 @@ module.exports = {
         .setTimestamp()  
         ]});
 
-      return LogChannel.send({embeds: [
+        console.log(`VOIDED || Updated antispam entry for ${interaction.guild.name}.`)
+
+        return LogChannel.send({embeds: [
           new MessageEmbed()
           .setColor("GREEN")
           .setTitle("Antispam Settings Changed")
@@ -129,15 +132,7 @@ module.exports = {
            .addField(`Staff:`, `${interaction.user}`)
            .setTimestamp()  
         ]});
-    }
-    
-    console.log(`VOIDED || An error has occurred. The antispam settings for ${interaction.guild.name} weren't configured.`);
-    
-    return interaction.reply({embeds: [
-      new MessageEmbed()
-      .setColor("RED")
-      .setDescription(`> :no_entry_sign: An unknown error has occured.`)
-    ], ephemeral: true}).catch();
-    
+      }
+    });
   }
 }
